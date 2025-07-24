@@ -40,7 +40,8 @@ sudo chown -R "$CURRENT_USER:$CURRENT_USER" "$SPLUNK_DIR"
 
 # 7. Starte Splunk (inkl. Lizenzannahme)
 echo "[INFO] Starte Splunk mit Lizenzannahme..."
-"$SPLUNK_DIR/bin/splunk" start --accept-license --answer-yes --no-prompt
+"$SPLUNK_DIR/bin/splunk" start --accept-license --answer-yes 
+#--no-prompt
 
 # 8. Servernamen abfragen
 read -p "Bitte den gewünschten Servernamen eingeben: " SERVERNAME
