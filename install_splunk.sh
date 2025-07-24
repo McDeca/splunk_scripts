@@ -33,36 +33,35 @@ else
   SPLUNK_DIR="/opt/splunk"
 fi
 
-# 6. Aktuellen Benutzer ermitteln und Rechte setzen
-CURRENT_USER=$(whoami)
-echo "[INFO] Setze Besitzerrechte auf $CURRENT_USER"
-sudo chown -R "$CURRENT_USER:$CURRENT_USER" "$SPLUNK_DIR"
+# 6. Benutzer für Berechtigung abfragen
+read -p "Für welchen Benutzer sollen die Rechte auf $SPLUNK_DIR gesetzt werden? " SPLUNK_USER
 
-# 7. Starte Splunk (inkl. Lizenzannahme)
-echo "[INFO] Starte Splunk mit Lizenzannahme..."
-"$SPLUNK_DIR/bin/splunk" start --accept-license --answer-yes 
-#--no-prompt
+# 7. Berechtigungen setzen
+echo "[INFO] Setze Besitzerrechte auf $SPLUNK_USER"
+sudo chown -R "$SPLUNK_USER:$SPLUNK_USER" "$SPLUNK_DIR"
 
-# 8. Servernamen abfragen
+# 8. Splunk starten (inkl. Lizenzannahme)
+echo "[INFO] Starte Splunk (interaktive Lizenzannahme)..."
+"$SPLUNK_DIR/bin/splunk" start --accept-license
+
+# 9. Servernamen abfragen
 read -p "Bitte den gewünschten Servernamen eingeben: " SERVERNAME
 
-# 9. Servernamen und Default-Hostname setzen
+# 10. Servernamen und Default-Hostname setzen
 echo "[INFO] Setze Servernamen und Default-Hostname..."
 "$SPLUNK_DIR/bin/splunk" set servername "$SERVERNAME"
 "$SPLUNK_DIR/bin/splunk" set default-hostname "$SERVERNAME"
 
-# 10. IP des Deploymentservers erfragen
+# 11. IP des Deploymentservers abfragen
 read -p "Bitte die IP des Deploymentservers eingeben (nur IP, ohne Port): " DEPLOY_IP
-
-# Port 8089 anhängen
 DEPLOY_TARGET="${DEPLOY_IP}:8089"
 
-# 11. Deployment-Server setzen
+# 12. Deployment-Server konfigurieren
 echo "[INFO] Setze Deployment-Server auf $DEPLOY_TARGET"
 "$SPLUNK_DIR/bin/splunk" set deploy-poll "$DEPLOY_TARGET"
 
-# 12. Splunk bei Systemstart aktivieren
-echo "[INFO] Aktiviere Splunk beim Systemstart..."
-sudo "$SPLUNK_DIR/bin/splunk" enable boot-start -user "$CURRENT_USER"
+# 13. Splunk für Autostart konfigurieren
+echo "[INFO] Aktiviere Splunk beim Systemstart für Benutzer $SPLUNK_USER ..."
+sudo "$SPLUNK_DIR/bin/splunk" enable boot-start -user "$SPLUNK_USER"
 
 echo "[FERTIG] Splunk wurde erfolgreich installiert, gestartet und konfiguriert."
