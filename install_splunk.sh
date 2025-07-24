@@ -33,6 +33,14 @@ else
   SPLUNK_DIR="/opt/splunk"
 fi
 
+# Verzeichnis sicherstellen
+if [ ! -d "$SPLUNK_DIR" ]; then
+  echo "[INFO] Erstelle Verzeichnis $SPLUNK_DIR ..."
+  sudo mkdir -p "$SPLUNK_DIR"
+else
+  echo "[INFO] Verzeichnis $SPLUNK_DIR existiert bereits."
+fi
+
 # 6. Benutzer für Berechtigung abfragen
 read -p "Für welchen Benutzer sollen die Rechte auf $SPLUNK_DIR gesetzt werden? " SPLUNK_USER
 
