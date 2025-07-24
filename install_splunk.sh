@@ -46,7 +46,7 @@ read -p "Für welchen Benutzer sollen die Rechte auf $SPLUNK_DIR gesetzt werden?
 
 # 7. Berechtigungen setzen
 echo "[INFO] Setze Besitzerrechte auf $SPLUNK_USER"
-sudo chown -R "$SPLUNK_USER:$SPLUNK_USER" "$SPLUNK_DIR"
+sudo chown -R "$SPLUNK_USER" "$SPLUNK_DIR"
 
 # 8. Splunk starten (inkl. Lizenzannahme)
 echo "[INFO] Starte Splunk (interaktive Lizenzannahme)..."
